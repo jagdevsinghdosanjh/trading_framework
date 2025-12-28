@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 
+
 def plot_equity_curve(df):
     plt.figure(figsize=(12, 5))
     plt.plot(df.index, df["close"], label="Close Price")
@@ -8,7 +9,8 @@ def plot_equity_curve(df):
     plt.ylabel("Price")
     plt.grid(True)
     plt.legend()
-    plt.show()
+    plt.savefig("stock_equity_curve.png", bbox_inches="tight")
+    plt.close()
 
 
 def plot_cumulative_returns(df):
@@ -19,7 +21,8 @@ def plot_cumulative_returns(df):
     plt.ylabel("Growth")
     plt.grid(True)
     plt.legend()
-    plt.show()
+    plt.savefig("cumulative_returns.png", bbox_inches="tight")
+    plt.close()
 
 
 def plot_moving_averages(df):
@@ -32,7 +35,8 @@ def plot_moving_averages(df):
     plt.ylabel("Price")
     plt.grid(True)
     plt.legend()
-    plt.show()
+    plt.savefig("moving_averages.png", bbox_inches="tight")
+    plt.close()
 
 
 def plot_volatility(df):
@@ -43,7 +47,8 @@ def plot_volatility(df):
     plt.ylabel("Volatility")
     plt.grid(True)
     plt.legend()
-    plt.show()
+    plt.savefig("rolling_volatility.png", bbox_inches="tight")
+    plt.close()
 
 
 def plot_sharpe(df):
@@ -54,4 +59,21 @@ def plot_sharpe(df):
     plt.ylabel("Sharpe")
     plt.grid(True)
     plt.legend()
-    plt.show()
+    plt.savefig("rolling_sharpe_ratio.png", bbox_inches="tight")
+    plt.close()
+def plot_trade_equity(df):
+    plt.figure(figsize=(12, 5))
+    plt.plot(df.index, df["trade_equity"], marker="o", linestyle="--")
+    plt.title("Trade-by-Trade Equity")
+    plt.grid(True)
+    plt.savefig("trade_equity.png", bbox_inches="tight")
+    plt.close()
+
+
+def plot_exposure(df):
+    plt.figure(figsize=(12, 3))
+    plt.plot(df.index, df["exposure"], drawstyle="steps-post")
+    plt.title("Exposure (Long/Short/Flat)")
+    plt.grid(True)
+    plt.savefig("exposure.png", bbox_inches="tight")
+    plt.close()

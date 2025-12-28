@@ -19,6 +19,23 @@ from trading.stock_plots import (
     plot_sharpe,
 )
 
+# Collect PNGs from the folder where plots are saved
+image_folder = Path(".")   # or Path("charts") if you save there
+
+png_files = sorted([str(p) for p in image_folder.glob("*.png")])
+
+generate_pdf_report(png_files)
+
+
+# Collect all PNGs from current folder
+png_files = sorted([
+    str(p) for p in Path(".").glob("*.png")
+    if p.is_file() and p.suffix == ".png"
+])
+
+# Generate PDF report
+generate_pdf_report(png_files)
+
 
 def select_csv_cli(data_folder: Path) -> str:
     """CLI selector for CSV files inside the data folder."""
@@ -108,51 +125,6 @@ def main() -> None:
     plot_moving_averages(df)
     plot_volatility(df)
     plot_sharpe(df)
-
-    # ---------------------------------------------------------
-    # ✅ Generate PDF report AFTER all PNGs are saved
-    # ---------------------------------------------------------
-    image_folder = Path(".")  # or Path("charts") if you save there
-
-    png_files = sorted(
-        [
-            str(p)
-            for p in image_folder.glob("*.png")
-            if p.is_file() and p.suffix == ".png"
-        ]
-    )
-
-    # Build metrics for the PDF report
-    metrics = {
-    "Stock File": selected_csv,   # ⭐ NEW LINE
-    "Final Equity": float(bt_df["equity"].iloc[-1]),
-    "Sharpe Ratio": float(sharpe_ratio(bt_df["returns"])),
-    "Max Drawdown": float(max_drawdown(bt_df["equity"])),
-    "CAGR": float(cagr(bt_df["equity"])),
-    "Max DD Date": str(bt_df.attrs.get("max_drawdown_date", "N/A")),
-}
-#     metrics = {
-#     "Stock File": selected_csv,
-#     "Final Equity": float(bt_df["equity"].iloc[-1]),
-#     "Sharpe Ratio": float(sharpe_ratio(bt_df["returns"])),
-#     "Max Drawdown": float(max_drawdown(bt_df["equity"])),
-#     "CAGR": float(cagr(bt_df["equity"])),
-#     "Max DD Date": str(bt_df.attrs.get("max_drawdown_date", "N/A")),
-# }
-
-
-    # metrics = {
-    #     "Final Equity": float(bt_df["equity"].iloc[-1]),
-    #     "Sharpe Ratio": float(sharpe_ratio(bt_df["returns"])),
-    #     "Max Drawdown": float(max_drawdown(bt_df["equity"])),
-    #     "CAGR": float(cagr(bt_df["equity"])),
-    #     "Max DD Date": str(bt_df.attrs.get("max_drawdown_date", "N/A")),
-    # }
-
-    if png_files:
-        generate_pdf_report(png_files, metrics)
-    else:
-        print("\n⚠️ No PNG files found — PDF report not generated.")
 
 
 if __name__ == "__main__":

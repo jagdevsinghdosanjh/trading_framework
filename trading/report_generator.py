@@ -1,38 +1,33 @@
-from pathlib import Path
 from fpdf import FPDF
+from pathlib import Path
 from PIL import Image
-from typing import List
+import datetime
 
 
-def generate_pdf_report(image_paths: List[str], output_path: str = "Trading_Report.pdf") -> None:
-    """
-    Combines multiple PNG charts into a single PDF report.
-    Ensures images exist, converts them to RGB, and embeds them safely.
-    """
+def generate_pdf_report(image_paths, metrics, output="Report.pdf"):
     pdf = FPDF()
     pdf.set_auto_page_break(auto=False)
 
+    # COVER PAGE
+    pdf.add_page()
+    pdf.set_font("Arial", "B", 20)
+    pdf.cell(0, 20, "Trading Strategy Report", ln=True, align="C")
+
+    pdf.set_font("Arial", "", 14)
+    pdf.ln(10)
+    for k, v in metrics.items():
+        pdf.cell(0, 10, f"{k}: {v}", ln=True)
+
+    # CHART PAGES
     for img_path in image_paths:
-        img_path = Path(img_path)
-
-        if not img_path.exists():
-            print(f"⚠️ Skipping missing image: {img_path}")
-            continue
-
-        # Convert PNG to RGB (fixes transparency issues)
         img = Image.open(img_path).convert("RGB")
-        temp_jpg = img_path.with_suffix(".jpg")
-        img.save(temp_jpg)
-
-        title = img_path.stem.replace("_", " ")
+        temp = Path(img_path).with_suffix(".jpg")
+        img.save(temp)
 
         pdf.add_page()
-        pdf.set_font("Arial", "B", 16)
-        pdf.cell(0, 10, title, ln=True, align="C")
+        pdf.image(str(temp), x=10, y=10, w=190)
 
-        pdf.image(str(temp_jpg), x=10, y=25, w=190)
+        temp.unlink()
 
-        temp_jpg.unlink()  # remove temporary JPG
-
-    pdf.output(output_path)
-    print(f"\n📄 PDF report saved as: {output_path}")
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M")
+    pdf.output(f"Report_{timestamp}.pdf")
