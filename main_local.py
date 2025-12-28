@@ -19,6 +19,14 @@ from trading.stock_plots import (
     plot_sharpe,
 )
 
+# Collect PNGs from the folder where plots are saved
+image_folder = Path(".")   # or Path("charts") if you save there
+
+png_files = sorted([str(p) for p in image_folder.glob("*.png")])
+
+generate_pdf_report(png_files)
+
+
 # Collect all PNGs from current folder
 png_files = sorted([
     str(p) for p in Path(".").glob("*.png")
