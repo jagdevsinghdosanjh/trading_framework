@@ -1,0 +1,8 @@
+﻿fpdf2
+fastapi
+jupyter
+matplotlib
+numpy
+pandas
+pyyaml
+uvicorn

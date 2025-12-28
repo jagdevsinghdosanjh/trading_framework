@@ -1,0 +1,14 @@
+﻿# data_path: "./data/raw/trading-data/BANKNIFTY.csv"
+# timeframe: "D"
+# initial_capital: 100000
+# risk_per_trade: 0.01
+# atr_window: 14
+# atr_multiplier: 2.0
+# commission_per_trade: 0.0
+data_path: "data/AAPL_stock_data.csv"
+timeframe: "1D"
+initial_capital: 100000
+risk_per_trade: 0.01
+atr_window: 14
+atr_multiplier: 2.0
+commission_per_trade: 5.0
